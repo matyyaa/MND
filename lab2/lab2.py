@@ -72,6 +72,7 @@ def self_dispersion():
                 p = rkr
     return p_prob[p]
 
+#в змінну p_prob зберігається ймовірність гіпотези про однорідність дисперсій 
 
 def regressionCheck():
     y_norm1 = round(b0 - b1 - b2, 2)

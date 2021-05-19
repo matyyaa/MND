@@ -289,6 +289,9 @@ def linear(n, m):
     print('Розрахункове значення критерій Стьюдента:\n', student_t)
     res_student_t = [temp for temp in student_t if temp > student_cr_table]
     final_coefficients = [B[student_t.index(i)] for i in student_t if i in res_student_t]
+    if len(final_coefficients) == 2:
+        print('#' * 10, '\tEXIT\t', '#' * 10)
+        exit()
     print('Коефіцієнти {} статистично незначущі.'.
           format([i for i in B if i not in final_coefficients]))
 

@@ -3,6 +3,7 @@ import sklearn.linear_model as lm
 from scipy.stats import f, t
 from functools import partial
 from pyDOE2 import *
+import time
 
 
 def regression(x, b):
@@ -161,6 +162,7 @@ def kriteriy_fishera(y, y_aver, y_new, n, m, d):
 
 
 def check(X, Y, B, n, m):
+    times = []
     print('\n\tПеревірка рівняння:')
     f1 = m - 1
     f2 = n
@@ -180,7 +182,10 @@ def check(X, Y, B, n, m):
     disp = s_kv(Y, y_aver, n, m)
     print('Дисперсія y:', disp)
 
+    cur_t = time.time()
     Gp = kriteriy_cochrana(Y, y_aver, n, m)
+    times.append(time.time() - cur_t)
+
     print(f'Gp = {Gp}')
     if Gp < G_kr:
         print(f'З ймовірністю {1 - q} дисперсії однорідні.')
@@ -189,7 +194,10 @@ def check(X, Y, B, n, m):
         m += 1
         main(n, m)
 
+    cur_t = time.time()
     ts = kriteriy_studenta(X[:, 1:], Y, y_aver, n, m)
+    times.append(time.time() - cur_t)
+
     print('\nКритерій Стьюдента:\n', ts)
     res = [t for t in ts if t > t_student]
     final_k = [B[i] for i in range(len(ts)) if ts[i] in res]
@@ -210,7 +218,9 @@ def check(X, Y, B, n, m):
         return
     f4 = n - d
 
+    cur_t = time.time()
     F_p = kriteriy_fishera(Y, y_aver, y_new, n, m, d)
+    times.append(time.time() - cur_t)
 
     fisher = partial(f.ppf, q=0.95)
     f_t = fisher(dfn=f4, dfd=f3)  # табличне знач
@@ -221,6 +231,9 @@ def check(X, Y, B, n, m):
         print('Математична модель адекватна експериментальним даним')
     else:
         print('Математична модель не адекватна експериментальним даним')
+
+    print('#' * 40)
+    print(times)
 
 
 def main(n, m):

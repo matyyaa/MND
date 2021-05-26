@@ -4,7 +4,9 @@ from numpy.linalg import solve
 from scipy.stats import f, t
 from functools import partial
 
-x_range = [(15, 45), (15, 50), (15, 30)]
+coefs = []
+
+x_range = np.array([(15, 45), (15, 50), (15, 30)])
 x_aver_max = (45 + 50 + 30) / 3
 x_aver_min = (15 + 15 + 15) / 3
 
@@ -119,6 +121,7 @@ def cohren(f1, f2, q=0.05):
 
 
 def main(n, m):
+    global x_range, x_aver_min, x_aver_max
     f1 = m - 1
     f2 = n
     f3 = f1 * f2
@@ -133,6 +136,7 @@ def main(n, m):
     y_aver = [round(sum(i) / len(i), 2) for i in y]
 
     B = find_coefficient(x, y_aver, n)
+    coefs = B[1:]
 
     Gp = kriteriy_cochrena(y, y_aver, n, m)
     print(f'Gp = {Gp}')
@@ -167,10 +171,14 @@ def main(n, m):
     print('\nПеревірка адекватності за критерієм Фішера')
     print('Fp =', F_p)
     print('F_t =', f_t)
+
     if F_p < f_t:
         print('Математична модель адекватна експериментальним даним')
     else:
         print('Математична модель не адекватна експериментальним даним')
+        for coef in coefs:
+            x_range = x_range / coef
+        main(4, 4)
 
 
 if __name__ == '__main__':

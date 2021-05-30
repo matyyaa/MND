@@ -121,7 +121,8 @@ def fisher_test():
         dispersion_ad += (m * (average_y[row] - check_result(student_lst, row))) / (N - d)
     F_practice = dispersion_ad / dispersion_b2
     F_theoretical = get_fisher_value(f3, f4, q)
-    return F_practice < F_theoretical
+    F1_th = get_fisher_value(f3, f4, 0.9)
+    return F_practice < F_theoretical and F_practice < F1_th
 
 
 matrix_pfe = [
